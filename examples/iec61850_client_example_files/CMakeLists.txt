@@ -13,5 +13,5 @@ add_executable(file-tool
 )
 
 target_link_libraries(file-tool
-    iec61850
+    iec61850-dpdk
 )

@@ -17,5 +17,5 @@ add_executable(server_example_simple
 )
 
 target_link_libraries(server_example_simple
-    iec61850
+    iec61850-dpdk
 )

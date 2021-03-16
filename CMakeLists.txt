@@ -7,7 +7,7 @@ if(DEFINED ENV{TOOLCHAIN})
     set(CMAKE_AR	"$ENV{TOOLCHAIN}ar" CACHE FILEPATH "CW archiver" FORCE)
 endif()
 
-project(libiec61850)
+project(libiec61850-dpdk)
 ENABLE_TESTING()
 
 set(LIB_VERSION_MAJOR "1")
@@ -145,7 +145,7 @@ endif(BUILD_EXAMPLES)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/src)
 
-install(FILES ${API_HEADERS} DESTINATION include/libiec61850 COMPONENT Development)
+install(FILES ${API_HEADERS} DESTINATION include/libiec61850-dpdk COMPONENT Development)
 
 if(BUILD_PYTHON_BINDINGS)
     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/pyiec61850)

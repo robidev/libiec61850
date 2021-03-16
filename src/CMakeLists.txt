@@ -289,57 +289,57 @@ if ( WIN32 )
 	set(library_SRCS ${library_SRCS} ${RES_FILES})
 endif( WIN32 )
 
-add_library (iec61850-shared SHARED ${library_SRCS} )
+add_library (iec61850-dpdk-shared SHARED ${library_SRCS} )
 
-set_target_properties(iec61850-shared PROPERTIES
-           OUTPUT_NAME iec61850
+set_target_properties(iec61850-dpdk-shared PROPERTIES
+           OUTPUT_NAME iec61850-dpdk
            SOVERSION "${LIB_VERSION_MAJOR}.${LIB_VERSION_MINOR}.${LIB_VERSION_PATCH}"
 )
 
-target_compile_definitions(iec61850-shared PRIVATE EXPORT_FUNCTIONS_FOR_DLL)
+target_compile_definitions(iec61850-dpdk-shared PRIVATE EXPORT_FUNCTIONS_FOR_DLL)
 
-target_link_libraries(iec61850-shared
-	hal-shared
+target_link_libraries(iec61850-dpdk-shared
+	hal-dpdk-shared
 )
 
-GENERATE_EXPORT_HEADER(iec61850-shared
-			BASE_NAME iec61850-shared
-			EXPORT_MACRO_NAME iec61850-shared_EXPORT
-			EXPORT_FILE_NAME iec61850-shared_export.h
-			STATIC_DEFINE iec61850-shared_BUILT_AS_STATIC
+GENERATE_EXPORT_HEADER(iec61850-dpdk-shared
+			BASE_NAME iec61850-dpdk-shared
+			EXPORT_MACRO_NAME iec61850-dpdk-shared_EXPORT
+			EXPORT_FILE_NAME iec61850-dpdk-shared_export.h
+			STATIC_DEFINE iec61850-dpdk-shared_BUILT_AS_STATIC
 )
 
-add_library (iec61850 STATIC ${library_SRCS})
+add_library (iec61850-dpdk STATIC ${library_SRCS})
 
-target_link_libraries(iec61850
-	hal
+target_link_libraries(iec61850-dpdk
+	hal-dpdk
 )
 
 IF(UNIX)
   IF (CONFIG_SYSTEM_HAS_CLOCK_GETTIME)
-     target_link_libraries (iec61850
+     target_link_libraries (iec61850-dpdk
          -lpthread
          -lm
          -lrt
      )
   ELSE ()
-     target_link_libraries (iec61850
+     target_link_libraries (iec61850-dpdk
          -lpthread
          -lm
      )
   ENDIF (CONFIG_SYSTEM_HAS_CLOCK_GETTIME)
 ENDIF(UNIX)
 IF(MINGW)
-  target_link_libraries(iec61850-shared ws2_32 iphlpapi)
-  target_link_libraries(iec61850 ws2_32 iphlpapi)
+  target_link_libraries(iec61850-dpdk-shared ws2_32 iphlpapi)
+  target_link_libraries(iec61850-dpdk ws2_32 iphlpapi)
 ENDIF(MINGW)
 
 iF(WITH_WPCAP)
-target_link_libraries(iec61850
+target_link_libraries(iec61850-dpdk
    ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/winpcap/lib/wpcap.lib
    ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/winpcap/lib/packet.lib
 )
-target_link_libraries(iec61850-shared
+target_link_libraries(iec61850-dpdk-shared
    ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/winpcap/lib/wpcap.lib
    ${CMAKE_CURRENT_SOURCE_DIR}/../third_party/winpcap/lib/packet.lib
 )
@@ -364,13 +364,13 @@ if(UNIX)
     set(BINDIR ${CMAKE_INSTALL_BINDIR})
 
     configure_file(
-        ${CMAKE_CURRENT_LIST_DIR}/libiec61850.pc.in
-        ${CMAKE_CURRENT_BINARY_DIR}/libiec61850.pc @ONLY
+        ${CMAKE_CURRENT_LIST_DIR}/libiec61850-dpdk.pc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/libiec61850-dpdk.pc @ONLY
     )
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libiec61850.pc" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pkgconfig")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libiec61850-dpdk.pc" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pkgconfig")
 endif()
 
-install (TARGETS iec61850 iec61850-shared
+install (TARGETS iec61850-dpdk iec61850-dpdk-shared
 	RUNTIME DESTINATION ${BINDIR} COMPONENT Applications
 	ARCHIVE DESTINATION ${LIBDIR} COMPONENT Libraries
     LIBRARY DESTINATION ${LIBDIR} COMPONENT Libraries

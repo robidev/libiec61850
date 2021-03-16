@@ -17,5 +17,5 @@ add_executable(server_example_threadless
 )
 
 target_link_libraries(server_example_threadless
-    iec61850
+    iec61850-dpdk
 )

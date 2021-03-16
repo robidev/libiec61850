@@ -30,7 +30,7 @@ add_executable(server_example_logging
 )
 
 target_link_libraries(server_example_logging
-    iec61850
+    iec61850-dpdk
 )
 
 ELSE()

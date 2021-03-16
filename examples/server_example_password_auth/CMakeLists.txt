@@ -17,5 +17,5 @@ add_executable(server_example_password_auth
 )
 
 target_link_libraries(server_example_password_auth
-    iec61850
+    iec61850-dpdk
 )

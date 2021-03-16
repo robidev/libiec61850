@@ -13,5 +13,5 @@ add_executable(iec61850_client_async
 )
 
 target_link_libraries(iec61850_client_async
-    iec61850
+    iec61850-dpdk
 )

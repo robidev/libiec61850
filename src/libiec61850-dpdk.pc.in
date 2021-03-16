@@ -9,5 +9,5 @@ Description: @CPACK_PACKAGE_DESCRIPTION@
 Version: @LIB_VERSION_MAJOR@.@LIB_VERSION_MINOR@.@LIB_VERSION_PATCH@
 
 Requires:
-Libs: -L${libdir} -L${sharedlibdir} -liec61850
+Libs: -L${libdir} -L${sharedlibdir} -liec61850-dpdk
 Cflags: -I${includedir}

@@ -13,5 +13,5 @@ add_executable(iec61850_client_example5
 )
 
 target_link_libraries(iec61850_client_example5
-    iec61850
+    iec61850-dpdk
 )

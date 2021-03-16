@@ -17,7 +17,7 @@ add_executable(server_example_goose
 )
 
 target_link_libraries(server_example_goose
-    iec61850
+    iec61850-dpdk
 )
 
 

@@ -14,7 +14,7 @@ add_executable(sv_subscriber_example
 )
 
 target_link_libraries(sv_subscriber_example
-    iec61850
+    iec61850-dpdk
 )
 
 

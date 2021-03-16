@@ -23,5 +23,5 @@ add_executable(tls_server_example
 )
 
 target_link_libraries(tls_server_example
-    iec61850
+    iec61850-dpdk
 )

@@ -17,5 +17,5 @@ add_executable(tls_client_example
 )
 
 target_link_libraries(tls_client_example
-    iec61850
+    iec61850-dpdk
 )

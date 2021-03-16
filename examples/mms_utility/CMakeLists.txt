@@ -13,5 +13,5 @@ add_executable(mms_utility
 )
 
 target_link_libraries(mms_utility
-    iec61850
+    iec61850-dpdk
 )
