@@ -182,9 +182,9 @@ Ethernet_sendPacket(EthernetSocket ethSocket, uint8_t* buffer, int packetSize)
 		printf("cannot allocate rte_mbuf\n");
 		return 0;
 	}
+    	rte_pktmbuf_reset(m);
 	m->nb_segs = 1;
 	m->next = NULL;
-	m->data_len = (uint16_t)packetSize;
 	//printf("len: %d\n", m->data_len);
 	char *eth_hdr = rte_pktmbuf_append(m,m->data_len);
 	if(eth_hdr == NULL)
@@ -192,7 +192,8 @@ Ethernet_sendPacket(EthernetSocket ethSocket, uint8_t* buffer, int packetSize)
 		printf("cannot allocate eth_hdr\n");
 		return 0;
 	}
-
+	m->data_len = (uint16_t)packetSize;
+	m->pkt_len =  (uint16_t)packetSize;
 	//printf("allocated eth_hdr\n");
 	rte_memcpy(eth_hdr, buffer, packetSize);
 	//printf("memcpy done\n");
