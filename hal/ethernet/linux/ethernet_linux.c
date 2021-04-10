@@ -147,6 +147,53 @@ void Ethernet_setProtocolFilter(EthernetSocket ethSocket, uint16_t etherType)
 }
 
 
+void hexDump(char *desc, void *addr, int len) 
+{
+    int i;
+    unsigned char buff[17];
+    unsigned char *pc = (unsigned char*)addr;
+
+    // Output description if given.
+    if (desc != NULL)
+        printf ("%s:\n", desc);
+
+    // Process every byte in the data.
+    for (i = 0; i < len; i++) {
+        // Multiple of 16 means new line (with line offset).
+
+        if ((i % 16) == 0) {
+            // Just don't print ASCII for the zeroth line.
+            if (i != 0)
+                printf("  %s\n", buff);
+
+            // Output the offset.
+            printf("  %04x ", i);
+        }
+
+        // Now the hex code for the specific character.
+        printf(" %02x", pc[i]);
+
+        // And store a printable ASCII character for later.
+        if ((pc[i] < 0x20) || (pc[i] > 0x7e)) {
+            buff[i % 16] = '.';
+        } else {
+            buff[i % 16] = pc[i];
+        }
+
+        buff[(i % 16) + 1] = '\0';
+    }
+
+    // Pad out last line if not exactly 16 characters.
+    while ((i % 16) != 0) {
+        printf("   ");
+        i++;
+    }
+
+    // And print the final ASCII bit.
+    printf("  %s\n", buff);
+}
+
+
 /* non-blocking receive */
 int Ethernet_receivePacket(EthernetSocket self, uint8_t* buffer, int bufferSize)
 {
@@ -159,13 +206,15 @@ int Ethernet_receivePacket(EthernetSocket self, uint8_t* buffer, int bufferSize)
 	if (likely(nb_rx != 0))
 	{
 		uint8_t *pkt_data = rte_pktmbuf_mtod(bufs[0], uint8_t *);
-		uint32_t pkt_len = rte_pktmbuf_pkt_len(bufs[0]) - sizeof(struct rte_ether_hdr);
+		uint32_t data_len = rte_pktmbuf_pkt_len(bufs[0]);
 		
-		uint32_t len = pkt_len;
-		if(pkt_len > (uint32_t)bufferSize)
+
+		uint32_t len = data_len;
+		if(data_len > (uint32_t)bufferSize) //truncate if packet is too big
 			len = bufferSize;
 
 		memcpy(buffer, pkt_data, len);
+		//hexDump("buf:", buffer, len); 
 		/* Free any unsent packets. */
 		rte_pktmbuf_free(bufs[0]);
 		return len;
@@ -199,7 +248,7 @@ Ethernet_sendPacket(EthernetSocket ethSocket, uint8_t* buffer, int packetSize)
 	//printf("memcpy done\n");
 
 	uint16_t port = ethSocket->rawSocket;
-    	//sendto(ethSocket->rawSocket, buffer, packetSize, 0, (struct sockaddr*) &(ethSocket->socketAddress), sizeof(ethSocket->socketAddress));
+
 	int ret = rte_eth_tx_burst(port, 0, &m, 1);
 
 	if(unlikely(ret < 1)) {
